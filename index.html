@@ -332,7 +332,7 @@
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
         <div>
-          <h1>Smooth Reader <span class="badge">2nd grade</span></h1>
+          <h1>Smooth Reader <span class=\"badge\" id=\"gradeBadge\">2nd grade</span></h1>
           <p class="sub">A 5‑minute fluency loop: rhythm → clarity → model → chunks → performance.</p>
         </div>
       </div>
@@ -451,38 +451,108 @@
     const POOLS = {
       1: {
         rhymes: [
-          "My cat wore a hat.\nIt sat very flat.\nIt saw a small bug\nAnd said, ‘Hello, pal!’",
-          "A frog on a log\nWent hop, hop, hop.\nIt slipped, it giggled,\nAnd wouldn’t stop.",
-          "I found a tiny kite\nThat wanted to fly.\nIt waved at the clouds\nAnd winked at the sky.",
+          "My cat wore a hat.
+It sat very flat.
+It saw a small bug
+And said, ‘Hello, pal!’",
+          "A frog on a log
+Went hop, hop, hop.
+It slipped, it giggled,
+And wouldn’t stop.",
+          "I found a tiny kite
+That wanted to fly.
+It waved at the clouds
+And winked at the sky.",
+          "A red ball bounced
+One, two, three.
+It rolled to my shoe
+And smiled at me.",
+          "The little boat
+Went swish, swish, swish.
+It sailed past rocks
+And waved at fish.",
+          "My toast got cold
+So it wore a coat.
+It sat so snug
+On a tiny note.",
+          "A sleepy bear
+Sat in a chair.
+It blinked twice
+And didn’t care.",
+          "The rain said ‘tap’
+On my window pane.
+I tapped right back
+And we played again.",
+          "A tiny bug
+Hugged a leaf.
+The leaf hugged back
+In sweet relief.",
+          "My dog found a sock
+Behind the door.
+It carried it proud
+Across the floor.",
         ],
         twisters: [
           "Tiny turtles tap toes.",
           "Silly snakes sip soup.",
           "Busy bunnies bounce balls.",
+          "Dizzy dogs dig dirt.",
+          "Fuzzy foxes fan faces.",
+          "Happy hens hop home.",
+          "Red rats run roads.",
+          "Puppies pop paper.",
         ],
         echoSentences: [
           "The sun is up and warm.",
           "My dog ran to the gate.",
           "I can read this line smoothly.",
+          "We went up the big hill.",
+          "The cat sat by the door.",
+          "I will pause at the comma, then go.",
+          "My voice can sound calm and clear.",
+          "I read the sentence all the way through.",
         ],
         chunkSentences: [
           "After school / we drew pictures / on big paper.",
           "In the morning / I found / a shiny rock.",
           "On the bench / the cat / took a nap.",
+          "At the park / we ran / and we laughed.",
+          "Before dinner / I washed / my hands.",
+          "In the blue sky / birds / flew high.",
+          "On my desk / I placed / my book.",
         ],
         performanceLines: [
           "I can do hard things.",
           "This story is fun to read.",
           "Listen to my smooth voice.",
+          "I read with my best talking voice.",
+          "I will try again, even if I miss.",
+          "I can read this like I’m telling you.",
+          "I can read it smooth and steady.",
         ],
       },
       2: {
         rhymes: [
-          "The moon wore socks\nThe socks wore shoes\nThe shoes went dancing\nAnd forgot their blues",
-          "A pancake flipped\nAnd said, ‘Oh wow!’\nIt landed proud\nOn a plate—ker-pow!",
-          "My pencil wrote\nA silly joke\nIt made the eraser\nLaugh and choke",
-          "A cloud sat down\nOn a windy day\nIt yawned a yawn\nAnd blew away",
-          "The mailbox sang\nA rusty tune\nIt hummed it softly\nUnder the moon",
+          "The moon wore socks
+The socks wore shoes
+The shoes went dancing
+And forgot their blues",
+          "A pancake flipped
+And said, ‘Oh wow!’
+It landed proud
+On a plate—ker-pow!",
+          "My pencil wrote
+A silly joke
+It made the eraser
+Laugh and choke",
+          "A cloud sat down
+On a windy day
+It yawned a yawn
+And blew away",
+          "The mailbox sang
+A rusty tune
+It hummed it softly
+Under the moon",
         ],
         twisters: [
           "Lazy lions lick lemons.",
@@ -515,29 +585,87 @@
       },
       3: {
         rhymes: [
-          "A clever crow\nFound bread to share\nIt tapped the box\nWith extra care\nThe latch popped free\nThe feast began\n‘Teamwork,’ said the crow,\n‘is the best plan.’",
-          "A tiny train\nOf paper clips\nCrossed a desk\nIn bumpy trips\nIt reached the lamp\nAnd made a stop\nThen cheered aloud\nAt the very top",
-          "The rain wrote notes\nOn window glass\nThey slid like sleds\nAnd hurried past\nI read them quick\nThen read them slow\nThe best part was\nHow smooth they’d go",
+          "A clever crow
+Found bread to share
+It tapped the box
+With extra care
+The latch popped free
+The feast began
+‘Teamwork,’ said the crow,
+‘is the best plan.’",
+          "A tiny train
+Of paper clips
+Crossed a desk
+In bumpy trips
+It reached the lamp
+And made a stop
+Then cheered aloud
+At the very top",
+          "The rain wrote notes
+On window glass
+They slid like sleds
+And hurried past
+I read them quick
+Then read them slow
+The best part was
+How smooth they’d go",
+          "A windy day
+Stole every hat
+It chased them all
+Like a playful cat
+We laughed and ran
+Down Maple Street
+And caught our hats
+With stomping feet",
+          "A daring mouse
+With a paper map
+Found hidden cheese
+Behind a trap
+It marked the spot
+With a brave little X
+Then bowed and said,
+‘Next quest is next!’",
+          "The lighthouse blinked
+A careful code
+It guided ships
+On ocean road
+I read the flashes
+Line by line
+And kept my pace
+Both calm and fine",
         ],
         twisters: [
           "Greedy green geese gobble grapes.",
           "Tricky trains travel through thick tunnels.",
           "Brave brown bears bring bright berries.",
+          "Crisp crackers crack in crowded crates.",
+          "Seven silver swans swiftly swim south.",
+          "Witty witches whisper with white whistles.",
         ],
         echoSentences: [
           "The flashlight flickered as we searched the attic.",
           "Even when I stumble, I can recover and continue.",
           "The scientist carefully recorded each small change.",
+          "While the crowd cheered, the runner stayed focused.",
+          "Because the path was steep, we rested halfway up.",
+          "After the surprise ending, I reread the clue.",
+          "When my voice matches the mood, the story feels real.",
         ],
         chunkSentences: [
           "When the bell rang / we grabbed our notebooks / and hurried inside.",
           "At the edge of the field / the tall grass / swayed in waves.",
           "If I slow down / at the tricky word / the sentence will make sense.",
+          "Before we began / the teacher explained / the first two steps.",
+          "Because the wind was strong / the kite pulled / against my hands.",
+          "After the rain stopped / puddles reflected / the bright sky.",
         ],
         performanceLines: [
           "I can change my tone to match the mood of the story.",
           "I’ll pause at punctuation and keep my phrases together.",
           "I’ll read it again with confidence and clear expression.",
+          "I can emphasize the important words without speeding up.",
+          "I’ll keep my voice smooth, even on long sentences.",
+          "I can read this like I’m presenting it to an audience.",
         ],
       }
     };
@@ -813,6 +941,8 @@
 
     $("#level").addEventListener("change", (e)=>{
       state.level = Number(e.target.value);
+      const badge = $("#gradeBadge");
+      if(badge) badge.textContent = state.level === 1 ? "1st grade" : state.level === 2 ? "2nd grade" : "3rd grade";
       newSet();
     });
 
@@ -850,6 +980,9 @@
 
     // Init
     state.level = Number($("#level").value);
+    // Update header badge label
+    const badge = $("#gradeBadge");
+    if(badge) badge.textContent = state.level === 1 ? "1st grade" : state.level === 2 ? "2nd grade" : "3rd grade";
     state.bigText = $("#bigText").checked;
     state.ttsEnabled = $("#tts").checked;
     state.voiceRate = Number($("#rate").value);
