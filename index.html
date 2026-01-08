@@ -3,24 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Smooth Reader — 5-Minute Fluency Lab</title>
+  <title>Smooth Reader — 5‑Minute Fluency Lab</title>
   <meta name="description" content="A tiny, kid-friendly fluency practice site: rhyme, tongue twister, echo, chunking, performance." />
   <style>
     :root{
       --bg:#0b0f1a;
       --panel:#101a2b;
+      --panel2:#0f1626;
       --text:#eaf0ff;
       --muted:#a9b6d6;
       --line:rgba(255,255,255,.10);
       --accent:#7c5cff;
       --accent2:#35d3ff;
       --good:#2fe59a;
+      --warn:#ffcd4a;
+      --danger:#ff5c7a;
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --radius: 18px;
       --radius2: 14px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -33,7 +37,11 @@
         radial-gradient(900px 600px at 50% 100%, rgba(47,229,154,.12), transparent 60%),
         var(--bg);
     }
+
+    a{color:inherit}
+
     .wrap{max-width:1100px; margin:0 auto; padding:22px 18px 34px;}
+
     header{
       display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
       padding:14px 16px;
@@ -42,22 +50,33 @@
       background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       box-shadow: var(--shadow);
     }
-    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      min-width: 240px;
+    }
+
     .logo{
       width:44px; height:44px; border-radius:14px;
       background: conic-gradient(from 220deg, var(--accent), var(--accent2), var(--good), var(--accent));
       box-shadow: 0 10px 30px rgba(124,92,255,.25);
-      position:relative; overflow:hidden;
+      position:relative;
+      overflow:hidden;
     }
     .logo:after{
-      content:""; position:absolute; inset:-20%;
+      content:"";
+      position:absolute; inset:-20%;
       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), transparent 35%);
       transform: rotate(15deg);
     }
+
     h1{font-size:18px; margin:0; letter-spacing:.2px}
     .sub{margin:2px 0 0; color:var(--muted); font-size:12.5px}
 
-    .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:flex-end;}
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:flex-end;
+    }
+
     .pill{
       display:flex; align-items:center; gap:8px;
       padding:10px 12px;
@@ -65,7 +84,13 @@
       border:1px solid var(--line);
       background: rgba(0,0,0,.18);
     }
+
     label{font-size:12px; color:var(--muted)}
+
+    select, button, input[type="range"]{
+      font-family:var(--sans);
+    }
+
     select{
       background: rgba(255,255,255,.04);
       border: 1px solid var(--line);
@@ -74,6 +99,7 @@
       padding:9px 10px;
       outline:none;
     }
+
     button{
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(124,92,255,.28), rgba(124,92,255,.12));
@@ -84,9 +110,13 @@
       display:inline-flex; align-items:center; gap:8px;
       transition: transform .08s ease, filter .15s ease;
     }
+
     button:hover{filter:brightness(1.06)}
     button:active{transform: translateY(1px)}
-    button.secondary{background: rgba(255,255,255,.04);}
+
+    button.secondary{
+      background: rgba(255,255,255,.04);
+    }
 
     .grid{
       display:grid;
@@ -94,7 +124,11 @@
       gap: 14px;
       margin-top: 14px;
     }
-    @media (max-width: 900px){ .grid{grid-template-columns: 1fr} .brand{min-width: unset} }
+
+    @media (max-width: 900px){
+      .grid{grid-template-columns: 1fr}
+      .brand{min-width: unset}
+    }
 
     .card{
       border: 1px solid var(--line);
@@ -103,6 +137,7 @@
       box-shadow: var(--shadow);
       overflow:hidden;
     }
+
     .cardHead{
       display:flex; align-items:flex-start; justify-content:space-between;
       gap: 12px;
@@ -110,6 +145,7 @@
       border-bottom:1px solid var(--line);
       background: rgba(0,0,0,.18);
     }
+
     .titleRow{display:flex; align-items:center; gap:10px}
     .badge{
       font-size:12px;
@@ -120,9 +156,24 @@
       color: var(--muted);
     }
 
-    .step{padding: 14px 16px 16px; display:flex; flex-direction:column; gap: 10px;}
-    .step h2{margin:0; font-size:15px; display:flex; align-items:center; gap:8px;}
-    .hint{color: var(--muted); font-size: 12.5px; line-height: 1.35;}
+    .step{
+      padding: 14px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .step h2{
+      margin:0;
+      font-size:15px;
+      display:flex; align-items:center; gap:8px;
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
 
     .practiceText{
       font-size: 22px;
@@ -133,9 +184,11 @@
       border:1px solid var(--line);
       background: rgba(0,0,0,.16);
     }
+
     .practiceText.big{font-size: 28px}
 
     .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between}
+
     .miniBtns{display:flex; flex-wrap:wrap; gap:8px}
 
     .icon{
@@ -147,6 +200,7 @@
       font-size: 12px;
       color: var(--muted);
     }
+
     .kbd{
       font-family: var(--mono);
       font-size: 12px;
@@ -163,6 +217,7 @@
       display:flex; gap:12px; align-items:center; justify-content:space-between;
       background: rgba(0,0,0,.14);
     }
+
     .bar{
       height: 10px;
       border-radius: 999px;
@@ -171,12 +226,16 @@
       overflow:hidden;
       flex:1;
     }
+
     .bar > i{
-      display:block; height:100%; width:0%;
+      display:block;
+      height:100%;
+      width:0%;
       background: linear-gradient(90deg, var(--accent), var(--accent2), var(--good));
       border-radius: 999px;
       transition: width .25s ease;
     }
+
     .timer{
       font-family: var(--mono);
       font-size: 12.5px;
@@ -185,13 +244,20 @@
       text-align:right;
     }
 
-    .sidebar{padding: 14px 16px 16px; display:flex; flex-direction:column; gap: 12px;}
+    .sidebar{
+      padding: 14px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
     .panel{
       border:1px solid var(--line);
       border-radius: var(--radius);
       background: rgba(0,0,0,.16);
       padding: 12px;
     }
+
     .panel h3{margin:0 0 6px; font-size: 13px}
     .panel p{margin:0; color:var(--muted); font-size: 12.5px; line-height:1.4}
 
@@ -202,17 +268,27 @@
       border:1px solid var(--line);
       background: rgba(255,255,255,.03);
     }
+
     .toggle input{width:18px; height:18px}
-    .footerNote{color: var(--muted); font-size: 12px; margin-top: 10px; opacity: .9;}
+
+    .footerNote{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+      opacity: .9;
+    }
 
     .chunks{
-      display:flex; flex-wrap:wrap; gap: 8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
       padding: 12px;
       border-radius: var(--radius2);
       border:1px dashed rgba(255,255,255,.18);
       background: rgba(0,0,0,.14);
       margin-top: 8px;
     }
+
     .chunk{
       padding: 8px 10px;
       border-radius: 999px;
@@ -221,8 +297,18 @@
       font-size: 16px;
     }
 
+    .srOnly{
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
+    }
+
     .toast{
-      position: fixed; bottom: 16px; left: 50%;
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
       transform: translateX(-50%);
       background: rgba(16,26,43,.92);
       border: 1px solid var(--line);
@@ -246,25 +332,31 @@
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
         <div>
-          <h1>Smooth Reader <span class="badge" id="difficultyBadge">Medium</span></h1>
-          <p class="sub">A 5-minute fluency loop: rhythm → clarity → chunks → performance.</p>
+          <h1>Smooth Reader <span class=\"badge\" id=\"gradeBadge\">2nd grade</span></h1>
+          <p class="sub">A 5‑minute fluency loop: rhythm → clarity → model → chunks → performance.</p>
         </div>
       </div>
 
       <div class="controls">
         <div class="pill">
-          <label for="difficulty">Difficulty</label>
-          <select id="difficulty" aria-label="Choose difficulty">
-            <option value="1">Easy</option>
-            <option value="2" selected>Medium</option>
-            <option value="3">Hard</option>
+          <label for="level">Level</label>
+          <select id="level" aria-label="Choose level">
+            <option value="2" selected>2nd grade</option>
+            <option value="1">1st grade (easier)</option>
+            <option value="3">3rd grade (harder)</option>
           </select>
+        </div>
+
+        <div class="pill" title="Speech rate for the model voice">
+          <label for="rate">Voice speed</label>
+          <input id="rate" type="range" min="0.75" max="1.15" step="0.05" value="0.95" />
+          <span class="kbd" id="rateLabel">0.95×</span>
         </div>
 
         <button id="newSet" title="Generate a new daily set (N)">
           <span class="icon">N</span> New set
         </button>
-        <button id="start" class="secondary" title="Start / pause the 5-minute timer (Space)">
+        <button id="start" class="secondary" title="Start / pause the 5‑minute timer (Space)">
           <span class="icon">␣</span> Start
         </button>
       </div>
@@ -282,12 +374,13 @@
             </div>
             <div class="hint" style="margin-top:8px;">
               Tip: The goal is <b>smooth</b>, not fast. Try 2–3 reads per step.
-              <span class="kbd">N</span> new set · <span class="kbd">→</span> next · <span class="kbd">←</span> back · <span class="kbd">Space</span> start/pause
+              <span class="kbd">N</span> new set · <span class="kbd">→</span> next step · <span class="kbd">←</span> previous · <span class="kbd">Space</span> start/pause
             </div>
           </div>
           <div class="badge" id="stepBadge">Step 1 / 5</div>
         </div>
 
+        <!-- Steps are rendered here -->
         <div id="steps"></div>
 
         <div class="progressWrap">
@@ -314,6 +407,14 @@
               <div class="hint">Larger print for confidence.</div>
             </div>
             <input id="bigText" type="checkbox" />
+          </div>
+
+          <div class="toggle">
+            <div>
+              <b>Model voice (Echo)</b>
+              <div class="hint">Uses your browser’s speech. Click “Hear” then “Echo”.</div>
+            </div>
+            <input id="tts" type="checkbox" checked />
           </div>
 
           <div class="panel">
@@ -345,119 +446,231 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // Difficulty maps: 1=Easy, 2=Medium, 3=Hard
+    // ===== Content pools (original, kid-safe, adjustable by grade) =====
+
     const POOLS = {
       1: {
         rhymes: [
-          "My cat wore a hat.\\nIt sat very flat.\\nIt saw a small bug\\nAnd said, ‘Hello, pal!’",
-          "A frog on a log\\nWent hop, hop, hop.\\nIt slipped, it giggled,\\nAnd wouldn’t stop.",
-          "I found a tiny kite\\nThat wanted to fly.\\nIt waved at the clouds\\nAnd winked at the sky.",
-          "A red ball bounced\\nOne, two, three.\\nIt rolled to my shoe\\nAnd smiled at me.",
-          "The rain said ‘tap’\\nOn my window pane.\\nI tapped right back\\nAnd we played again."
+          "My cat wore a hat.
+It sat very flat.
+It saw a small bug
+And said, ‘Hello, pal!’",
+          "A frog on a log
+Went hop, hop, hop.
+It slipped, it giggled,
+And wouldn’t stop.",
+          "I found a tiny kite
+That wanted to fly.
+It waved at the clouds
+And winked at the sky.",
+          "A red ball bounced
+One, two, three.
+It rolled to my shoe
+And smiled at me.",
+          "The little boat
+Went swish, swish, swish.
+It sailed past rocks
+And waved at fish.",
+          "My toast got cold
+So it wore a coat.
+It sat so snug
+On a tiny note.",
+          "A sleepy bear
+Sat in a chair.
+It blinked twice
+And didn’t care.",
+          "The rain said ‘tap’
+On my window pane.
+I tapped right back
+And we played again.",
+          "A tiny bug
+Hugged a leaf.
+The leaf hugged back
+In sweet relief.",
+          "My dog found a sock
+Behind the door.
+It carried it proud
+Across the floor.",
         ],
         twisters: [
           "Tiny turtles tap toes.",
           "Silly snakes sip soup.",
           "Busy bunnies bounce balls.",
           "Dizzy dogs dig dirt.",
-          "Happy hens hop home."
+          "Fuzzy foxes fan faces.",
+          "Happy hens hop home.",
+          "Red rats run roads.",
+          "Puppies pop paper.",
         ],
         echoSentences: [
           "The sun is up and warm.",
           "My dog ran to the gate.",
+          "I can read this line smoothly.",
           "We went up the big hill.",
           "The cat sat by the door.",
-          "I read the whole sentence."
+          "I will pause at the comma, then go.",
+          "My voice can sound calm and clear.",
+          "I read the sentence all the way through.",
         ],
         chunkSentences: [
           "After school / we drew pictures / on big paper.",
           "In the morning / I found / a shiny rock.",
+          "On the bench / the cat / took a nap.",
           "At the park / we ran / and we laughed.",
           "Before dinner / I washed / my hands.",
-          "On my desk / I placed / my book."
+          "In the blue sky / birds / flew high.",
+          "On my desk / I placed / my book.",
         ],
         performanceLines: [
           "I can do hard things.",
           "This story is fun to read.",
           "Listen to my smooth voice.",
-          "I read with my talking voice.",
-          "I can try again."
+          "I read with my best talking voice.",
+          "I will try again, even if I miss.",
+          "I can read this like I’m telling you.",
+          "I can read it smooth and steady.",
         ],
       },
       2: {
         rhymes: [
-          "The moon wore socks\\nThe socks wore shoes\\nThe shoes went dancing\\nAnd forgot their blues",
-          "A pancake flipped\\nAnd said, ‘Oh wow!’\\nIt landed proud\\nOn a plate—ker-pow!",
-          "My pencil wrote\\nA silly joke\\nIt made the eraser\\nLaugh and choke",
-          "A cloud sat down\\nOn a windy day\\nIt yawned a yawn\\nAnd blew away",
-          "The mailbox sang\\nA rusty tune\\nIt hummed it softly\\nUnder the moon"
+          "The moon wore socks
+The socks wore shoes
+The shoes went dancing
+And forgot their blues",
+          "A pancake flipped
+And said, ‘Oh wow!’
+It landed proud
+On a plate—ker-pow!",
+          "My pencil wrote
+A silly joke
+It made the eraser
+Laugh and choke",
+          "A cloud sat down
+On a windy day
+It yawned a yawn
+And blew away",
+          "The mailbox sang
+A rusty tune
+It hummed it softly
+Under the moon",
         ],
         twisters: [
           "Lazy lions lick lemons.",
           "Five funny fish flip fast.",
           "Benny’s blue boat bumps bumps.",
           "Sandy skates in sunny streets.",
-          "Piper picks purple peppers."
+          "Piper picks purple peppers.",
         ],
         echoSentences: [
           "The dog trotted home with a proud grin.",
           "A bright kite tugged at the string.",
           "We packed snacks and hurried to the park.",
           "The storm passed, and the air felt new.",
-          "I paused at the comma, then kept going."
+          "I paused at the comma, then kept going.",
         ],
         chunkSentences: [
           "After lunch / we cleaned our tables / and lined up.",
           "On Saturday / my sister and I / built a fort.",
           "In the dark forest / an owl / watched quietly.",
           "Before the game / the coach / gave us a plan.",
-          "At the library / I chose / a mystery book."
+          "At the library / I chose / a mystery book.",
         ],
         performanceLines: [
           "I didn’t rush; I read it smoothly.",
           "This part sounds exciting when I add feeling.",
           "My voice can go up or down like a storyteller.",
           "I can read this like I’m talking to a friend.",
-          "I’ll try it again—same speed, smoother."
+          "I’ll try it again—same speed, smoother.",
         ],
       },
       3: {
         rhymes: [
-          "A clever crow\\nFound bread to share\\nIt tapped the box\\nWith extra care\\nThe latch popped free\\nThe feast began\\n‘Teamwork,’ said the crow,\\n‘is the best plan.’",
-          "The rain wrote notes\\nOn window glass\\nThey slid like sleds\\nAnd hurried past\\nI read them quick\\nThen read them slow\\nThe best part was\\nHow smooth they’d go",
-          "A daring mouse\\nWith a paper map\\nFound hidden cheese\\nBehind a trap\\nIt marked the spot\\nWith a brave little X\\nThen bowed and said,\\n‘Next quest is next!’",
-          "The lighthouse blinked\\nA careful code\\nIt guided ships\\nOn ocean road\\nI read the flashes\\nLine by line\\nAnd kept my pace\\nBoth calm and fine"
+          "A clever crow
+Found bread to share
+It tapped the box
+With extra care
+The latch popped free
+The feast began
+‘Teamwork,’ said the crow,
+‘is the best plan.’",
+          "A tiny train
+Of paper clips
+Crossed a desk
+In bumpy trips
+It reached the lamp
+And made a stop
+Then cheered aloud
+At the very top",
+          "The rain wrote notes
+On window glass
+They slid like sleds
+And hurried past
+I read them quick
+Then read them slow
+The best part was
+How smooth they’d go",
+          "A windy day
+Stole every hat
+It chased them all
+Like a playful cat
+We laughed and ran
+Down Maple Street
+And caught our hats
+With stomping feet",
+          "A daring mouse
+With a paper map
+Found hidden cheese
+Behind a trap
+It marked the spot
+With a brave little X
+Then bowed and said,
+‘Next quest is next!’",
+          "The lighthouse blinked
+A careful code
+It guided ships
+On ocean road
+I read the flashes
+Line by line
+And kept my pace
+Both calm and fine",
         ],
         twisters: [
           "Greedy green geese gobble grapes.",
           "Tricky trains travel through thick tunnels.",
           "Brave brown bears bring bright berries.",
           "Crisp crackers crack in crowded crates.",
-          "Seven silver swans swiftly swim south."
+          "Seven silver swans swiftly swim south.",
+          "Witty witches whisper with white whistles.",
         ],
         echoSentences: [
           "The flashlight flickered as we searched the attic.",
           "Even when I stumble, I can recover and continue.",
+          "The scientist carefully recorded each small change.",
           "While the crowd cheered, the runner stayed focused.",
           "Because the path was steep, we rested halfway up.",
-          "When my voice matches the mood, the story feels real."
+          "After the surprise ending, I reread the clue.",
+          "When my voice matches the mood, the story feels real.",
         ],
         chunkSentences: [
           "When the bell rang / we grabbed our notebooks / and hurried inside.",
           "At the edge of the field / the tall grass / swayed in waves.",
           "If I slow down / at the tricky word / the sentence will make sense.",
+          "Before we began / the teacher explained / the first two steps.",
           "Because the wind was strong / the kite pulled / against my hands.",
-          "After the rain stopped / puddles reflected / the bright sky."
+          "After the rain stopped / puddles reflected / the bright sky.",
         ],
         performanceLines: [
           "I can change my tone to match the mood of the story.",
           "I’ll pause at punctuation and keep my phrases together.",
-          "I can emphasize important words without speeding up.",
+          "I’ll read it again with confidence and clear expression.",
+          "I can emphasize the important words without speeding up.",
           "I’ll keep my voice smooth, even on long sentences.",
-          "I can read this like I’m presenting to an audience."
+          "I can read this like I’m presenting it to an audience.",
         ],
       }
     };
+
+    // ===== Utilities =====
 
     const $ = (sel) => document.querySelector(sel);
     const stepsEl = $("#steps");
@@ -467,10 +680,11 @@
       toastEl.innerHTML = `<div><b>${escapeHtml(msg)}</b> ${sub?`<br><small>${escapeHtml(sub)}</small>`:""}</div>`;
       toastEl.classList.add("show");
       window.clearTimeout(toastEl._t);
-      toastEl._t = window.setTimeout(()=>toastEl.classList.remove("show"), 1500);
+      toastEl._t = window.setTimeout(()=>toastEl.classList.remove("show"), 1600);
     }
 
     function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
     function escapeHtml(s){
       return String(s)
         .replaceAll("&","&amp;")
@@ -480,31 +694,57 @@
         .replaceAll("'","&#039;");
     }
 
+    // ===== App State =====
+
     const state = {
-      level: 2,        // 1 easy, 2 medium, 3 hard
+      level: 2,
       set: null,
       stepIndex: 0,
       bigText: false,
+      ttsEnabled: true,
       timer: { total: 300, remaining: 300, running: false, handle: null },
+      voiceRate: 0.95,
     };
 
     function buildSet(level){
       const pool = POOLS[level];
-      return {
-        level,
-        rhyme: rand(pool.rhymes),
-        twister: rand(pool.twisters),
-        echo: rand(pool.echoSentences),
-        chunk: rand(pool.chunkSentences),
-        perf: rand(pool.performanceLines),
-      };
+      // For variety: ensure echo/chunk/performance are different each time.
+      const rhyme = rand(pool.rhymes);
+      const twister = rand(pool.twisters);
+      const echo = rand(pool.echoSentences);
+      const chunk = rand(pool.chunkSentences);
+      const perf = rand(pool.performanceLines);
+      return { level, rhyme, twister, echo, chunk, perf };
     }
 
     function parseChunks(chunkSentence){
+      // split by / and trim
       return chunkSentence.split("/").map(s=>s.trim()).filter(Boolean);
     }
 
+    // ===== Speech (browser TTS) =====
+
+    function canSpeak(){
+      return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+    }
+
+    function speak(text){
+      if(!state.ttsEnabled) return;
+      if(!canSpeak()){
+        toast("Voice not available", "Your browser doesn’t support speech.");
+        return;
+      }
+      // Stop any current speaking
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = state.voiceRate;
+      u.pitch = 1;
+      u.volume = 1;
+      window.speechSynthesis.speak(u);
+    }
+
     // ===== Timer =====
+
     function fmtTime(sec){
       const m = Math.floor(sec/60);
       const s = sec%60;
@@ -549,10 +789,12 @@
       setTimerText();
     }
 
-    function stepTemplate({title, icon, why, text, actionsHtml, extraHtml}){
+    // ===== Rendering =====
+
+    function stepTemplate({n, title, icon, why, text, actionsHtml, extraHtml}){
       const big = state.bigText ? " big" : "";
       return `
-        <article class="step">
+        <article class="step" data-step="${n}">
           <div class="row">
             <h2><span class="icon" aria-hidden="true">${icon}</span> ${escapeHtml(title)}</h2>
             <div class="miniBtns">${actionsHtml || ""}</div>
@@ -569,35 +811,46 @@
       if(!set) return;
 
       const chunks = parseChunks(set.chunk);
+      const chunkJoined = chunks.join(" ");
 
       const steps = [
         {
           title: "Fresh rhyme",
           icon: "🎵",
-          why: "Read it 3 times: (1) slow, (2) like a song, (3) smoother.",
-          text: escapeHtml(set.rhyme).replaceAll("\n","<br>"),
-          actionsHtml: `<button class="secondary" data-action="tip" data-tip="Rhyme mode" data-sub="Try: slow → sing-song → smooth talking voice.">How</button>`
+          why: "Read it 3 times: (1) slow, (2) like a song, (3) smoother." ,
+          text: escapeHtml(set.rhyme).replaceAll("\n","<br>").replaceAll("\\n","<br>"),
+          actionsHtml: `
+            <button class="secondary" data-action="hear" data-text="${escapeHtml(set.rhyme.replaceAll("\n"," "))}">Hear</button>
+          `
         },
         {
           title: "Tongue twister",
           icon: "👅",
-          why: "Whisper → normal → smooth. Don’t race—connect the sounds.",
+          why: "Whisper → normal → smooth. Don’t race—connect the sounds." ,
           text: escapeHtml(set.twister),
-          actionsHtml: `<button class="secondary" data-action="tip" data-tip="Tongue twister" data-sub="Keep your mouth relaxed. Smooth is the goal.">How</button>`
+          actionsHtml: `
+            <button class="secondary" data-action="hear" data-text="${escapeHtml(set.twister)}">Hear</button>
+          `
         },
         {
           title: "Echo reading",
-          icon: "🗣️",
-          why: "Adult reads once. Student echoes with the same rhythm and pauses.",
+          icon: "🔊",
+          why: "Click Hear. Then read the same sentence back with the same rhythm." ,
           text: escapeHtml(set.echo),
-          actionsHtml: `<button class="secondary" data-action="tip" data-tip="Echo tip" data-sub="Match the pauses—like copying a melody.">Tip</button>`
+          actionsHtml: `
+            <button data-action="hear" data-text="${escapeHtml(set.echo)}">Hear</button>
+            <button class="secondary" data-action="tip" data-tip="Echo tip" data-sub="Try matching the pauses—like copying a melody.">Tip</button>
+          `
         },
         {
           title: "Phrase chunking",
           icon: "✂️",
-          why: "First read chunks, then read the whole sentence smoothly.",
+          why: "First read chunks, then read the whole sentence smoothly." ,
           text: escapeHtml(set.chunk),
-          actionsHtml: `<button data-action="toggleChunks">Show chunks</button>`,
+          actionsHtml: `
+            <button data-action="toggleChunks">Show chunks</button>
+            <button class="secondary" data-action="hear" data-text="${escapeHtml(chunkJoined)}">Hear</button>
+          `,
           extraHtml: `
             <div class="chunks" id="chunks" style="display:none" aria-label="Chunked phrase tiles">
               ${chunks.map(c=>`<span class="chunk">${escapeHtml(c)}</span>`).join("")}
@@ -607,21 +860,40 @@
         {
           title: "Performance read",
           icon: "🎭",
-          why: "Read it like: robot → storyteller → best smooth voice.",
+          why: "Read it like: robot → storyteller → best smooth voice." ,
           text: escapeHtml(set.perf),
-          actionsHtml: `<button class="secondary" data-action="tip" data-tip="Performance idea" data-sub="Try: robot (flat), calm teacher, excited announcer.">Ideas</button>`
+          actionsHtml: `
+            <button class="secondary" data-action="tip" data-tip="Performance idea" data-sub="Try: robot (flat), then calm teacher, then excited announcer.">Ideas</button>
+            <button class="secondary" data-action="hear" data-text="${escapeHtml(set.perf)}">Hear</button>
+          `
         }
       ];
 
+      // Only show the active step to keep it calm.
       const active = steps[stepIndex];
-      stepsEl.innerHTML = stepTemplate(active);
+      stepsEl.innerHTML = stepTemplate({
+        n: stepIndex+1,
+        title: active.title,
+        icon: active.icon,
+        why: active.why,
+        text: active.text,
+        actionsHtml: active.actionsHtml,
+        extraHtml: active.extraHtml
+      });
 
       $("#stepBadge").textContent = `Step ${stepIndex+1} / 5`;
 
+      // Update big text toggle
+      // (The class is applied per render.)
+
       // Bind action handlers
       stepsEl.querySelectorAll("button[data-action]").forEach(btn => {
-        btn.addEventListener("click", ()=>{
+        btn.addEventListener("click", (e)=>{
           const action = btn.dataset.action;
+          if(action === "hear"){
+            const t = btn.dataset.text || "";
+            speak(t);
+          }
           if(action === "toggleChunks"){
             const el = $("#chunks");
             if(!el) return;
@@ -633,6 +905,15 @@
             toast(btn.dataset.tip || "Tip", btn.dataset.sub || "");
           }
         });
+      });
+
+      // Disable hear buttons if TTS not available or toggled off
+      const can = canSpeak() && state.ttsEnabled;
+      stepsEl.querySelectorAll('button[data-action="hear"]').forEach(b=>{
+        b.disabled = !can;
+        b.style.opacity = can ? "1" : ".55";
+        b.style.cursor = can ? "pointer" : "not-allowed";
+        b.title = can ? b.title : "Voice disabled";
       });
     }
 
@@ -656,22 +937,30 @@
       toast("New set", "Ready when you are.");
     }
 
-    function setDifficultyUI(){
-      const badge = $("#difficultyBadge");
-      if(!badge) return;
-      badge.textContent = state.level === 1 ? "Easy" : state.level === 2 ? "Medium" : "Hard";
-    }
+    // ===== Wire up UI =====
 
-    // Wire up UI
-    $("#difficulty").addEventListener("change", (e)=>{
+    $("#level").addEventListener("change", (e)=>{
       state.level = Number(e.target.value);
-      setDifficultyUI();
+      const badge = $("#gradeBadge");
+      if(badge) badge.textContent = state.level === 1 ? "1st grade" : state.level === 2 ? "2nd grade" : "3rd grade";
       newSet();
     });
 
     $("#bigText").addEventListener("change", (e)=>{
       state.bigText = !!e.target.checked;
       render();
+    });
+
+    $("#tts").addEventListener("change", (e)=>{
+      state.ttsEnabled = !!e.target.checked;
+      // stop speaking if toggled off
+      if(!state.ttsEnabled && canSpeak()) window.speechSynthesis.cancel();
+      render();
+    });
+
+    $("#rate").addEventListener("input", (e)=>{
+      state.voiceRate = Number(e.target.value);
+      $("#rateLabel").textContent = `${state.voiceRate.toFixed(2)}×`;
     });
 
     $("#newSet").addEventListener("click", newSet);
@@ -690,10 +979,24 @@
     });
 
     // Init
-    state.level = Number($("#difficulty").value);
-    setDifficultyUI();
+    state.level = Number($("#level").value);
+    // Update header badge label
+    const badge = $("#gradeBadge");
+    if(badge) badge.textContent = state.level === 1 ? "1st grade" : state.level === 2 ? "2nd grade" : "3rd grade";
+    state.bigText = $("#bigText").checked;
+    state.ttsEnabled = $("#tts").checked;
+    state.voiceRate = Number($("#rate").value);
+    $("#rateLabel").textContent = `${state.voiceRate.toFixed(2)}×`;
     setTimerText();
     newSet();
+
+    // If TTS not supported, turn it off gracefully
+    if(!canSpeak()){
+      state.ttsEnabled = false;
+      $("#tts").checked = false;
+      toast("Note", "Your browser doesn’t support the model voice.");
+      render();
+    }
   </script>
 </body>
 </html>
