@@ -421,52 +421,76 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div id="testReport" role="alert"></div>
 
+  <!-- Lightweight global error reporter: runs even if the large script fails to parse -->
+  <script>
+    (function(){
+      function showReport(title, detail){
+        const r = document.getElementById('testReport');
+        if(r){
+          r.style.display = 'block';
+          r.innerHTML = '<b>' + (title || 'Error') + '</b><pre>' + (detail || '') + '</pre>';
+        } else {
+          // Fallback: alert so developer notices.
+          try { alert((title ? title + ': ' : '') + (detail || '')); } catch(e){}
+        }
+      }
+      window.addEventListener('error', function(e){
+        const detail = (e.error && (e.error.stack || e.error)) ? (e.error.stack || e.error) : (e.message || String(e));
+        showReport('Runtime error', detail);
+      });
+      window.addEventListener('unhandledrejection', function(e){
+        const reason = e && e.reason ? (e.reason.stack || e.reason) : String(e);
+        showReport('Unhandled promise rejection', reason);
+      });
+    })();
+  </script>
+
   <script>
   // Drop-in replacement script with strong safety + on-screen error reporting.
   (function(){
     const POOLS = {
       1: {
         rhymes: [
-          "Tap tap tap
+          `Tap tap tap
 On my desk
 Read the words
 Do your best
 Slow then smooth
 Keep the beat
 Make your reading
-Sound so neat",
-          "One two three
+Sound so neat`,
+          `One two three
 Here we go
 Not too fast
 Not too slow
 Pause and breathe
 Then you see
 Smooth reading
-Feels easy",
-          "Clap clap clap
+Feels easy`,
+          `Clap clap clap
 Soft and light
 Read the line
 Just right
 Try again
 Same calm pace
 Put a smile
-On your face",
-          "I read a line
+On your face`,
+          `I read a line
 I read it through
 I keep it smooth
 So can you
 I pause a bit
 Then I go
 Like a steady
-Little flow",
-          "Tick tock tick
+Little flow`,
+          `Tick tock tick
 Like a clock
 Words roll on
 Like a rock
 Stop at the dot
 Start anew
 Smooth all the way
-Through and through"
+Through and through`
         ],
         twisters: [
           "Tiny turtles tap toes.",
@@ -499,26 +523,26 @@ Through and through"
       },
       2: {
         rhymes: [
-          "The moon wore socks
+          `The moon wore socks
 The socks wore shoes
 The shoes went dancing
-And forgot their blues",
-          "A pancake flipped
+And forgot their blues`,
+          `A pancake flipped
 And said oh wow
 It landed proud
-On a plate ker-pow",
-          "My pencil wrote
+On a plate ker-pow`,
+          `My pencil wrote
 A silly joke
 It made the eraser
-Laugh and choke",
-          "A cloud sat down
+Laugh and choke`,
+          `A cloud sat down
 On a windy day
 It yawned a yawn
-And blew away",
-          "The mailbox sang
+And blew away`,
+          `The mailbox sang
 A rusty tune
 It hummed it softly
-Under the moon"
+Under the moon`
         ],
         twisters: [
           "Lazy lions lick lemons.",
@@ -551,86 +575,86 @@ Under the moon"
       },
       3: {
         rhymes: [
-          "I step to the beat
+          `I step to the beat
 One two one two
 I read it smooth
 And so can you
 I pause then flow
 Like a steady drum
 My words stay together
-They do not come undone",
-          "Tap tap tap
+They do not come undone`,
+          `Tap tap tap
 On the table top
 Read the line
 And do not stop
 Breathe at the comma
 Hold the pace
 Let every word
-Fall into place",
-          "Left foot right foot
+Fall into place`,
+          `Left foot right foot
 March in time
 Read the words
 And make them rhyme
 Not too fast
 Not too slow
 Keep it smooth
-And let it go",
-          "Clap the beat
+And let it go`,
+          `Clap the beat
 Soft and neat
 Keep your voice
 Calm and sweet
 If you miss
 Try again
 Smooth reading
-Wins the end",
-          "Drum on your knees
+Wins the end`,
+          `Drum on your knees
 Boom boom bam
 Read it like
 A story jam
 Stretch the long words
 Snap the short
 Smooth and steady
-Is the sport",
-          "Tick tock tick tock
+Is the sport`,
+          `Tick tock tick tock
 Like a clock
 Words roll by
 Like a rock
 Pause at the dot
 Then start anew
 Same calm speed
-All the way through",
-          "Under the moon
+All the way through`,
+          `Under the moon
 We read a tune
 Not in a rush
 Not too soon
 We group the words
 That belong
 Then read it
-Like a song",
-          "Zip zip zoom
+Like a song`,
+          `Zip zip zoom
 But not too fast
 Make the sentence
 Truly last
 Hold the meaning
 In your mind
 Smooth the bumps
-You always find",
-          "Here is the trick
+You always find`,
+          `Here is the trick
 For tricky text
 Read the phrase
 Then read the next
 Keep your rhythm
 Steady true
 The story sounds
-Brand new to you",
-          "One breath in
+Brand new to you`,
+          `One breath in
 One breath out
 Keep the beat
 And lose the doubt
 Read the line
 With gentle swing
 Smooth reading
-Is your thing"
+Is your thing`
         ],
         twisters: [
           "Greedy green geese gobble grapes.",
@@ -675,12 +699,11 @@ Is your thing"
     }
 
     function poemToHtml(s){
-      // Supports both real newlines and literal "\n" sequences.
+      // Supports both real newlines and literal "\\n" sequences.
       const safe = escapeHtml(String(s == null ? "" : s));
-      const normalized = safe.replaceAll("\\n", "
-");
-      return normalized.replaceAll("
-", "<br>");
+      // Turn literal backslash-n sequences into real newlines, then convert newlines to <br>.
+      const normalized = safe.replaceAll("\\n", "\n");
+      return normalized.replaceAll("\n", "<br>");
     }
 
     function showFatal(msg, err){
@@ -751,7 +774,7 @@ Is your thing"
       if(state.timer.handle) window.clearInterval(state.timer.handle);
       state.timer.handle = null;
       const startBtn = $("#start");
-      if(startBtn) startBtn.innerHTML = '<span class="icon">SP</span> Start';
+      if(startBtn) startBtn.innerHTML = '<span class="icon">␣</span> Start';
     }
 
     function toggleTimer(){
@@ -761,7 +784,7 @@ Is your thing"
       }
       state.timer.running = true;
       const startBtn = $("#start");
-      if(startBtn) startBtn.innerHTML = '<span class="icon">SP</span> Pause';
+      if(startBtn) startBtn.innerHTML = '<span class="icon">␣</span> Pause';
       state.timer.handle = window.setInterval(() => {
         state.timer.remaining = Math.max(0, state.timer.remaining - 1);
         setTimerText();
@@ -891,10 +914,8 @@ Is your thing"
       practice.setAttribute("role","group");
       practice.setAttribute("aria-label","Practice text");
 
-      // Normalize literal 
- sequences into real newlines, then rely on CSS pre-line.
-      const normalized = String(active.text || "").replaceAll("\n", "
-");
+      // Normalize literal "\\n" sequences into real newlines, then rely on CSS pre-line.
+      const normalized = String(active.text || "").replaceAll("\\n", "\n");
       const finalText = (normalized && normalized.trim().length) ? normalized : "[No text loaded - check POOLS + buildSet]";
       practice.textContent = finalText;
       // Force visibility in case of CSS collisions
@@ -957,7 +978,8 @@ Is your thing"
 
       window.addEventListener("keydown", (e) => {
         if(e.target && ["INPUT","SELECT","TEXTAREA"].includes(e.target.tagName)) return;
-        if(e.key === " "){ e.preventDefault(); toggleTimer(); }
+        // Support multiple representations of the space key across browsers.
+        if(e.code === "Space" || e.key === " " || e.key === "Spacebar"){ e.preventDefault(); toggleTimer(); }
         else if(e.key === "ArrowRight") nextStep();
         else if(e.key === "ArrowLeft") prevStep();
         else if(e.key.toLowerCase() === "n") newSet();
@@ -972,6 +994,6 @@ Is your thing"
     try{ init(); }
     catch(err){ showFatal("Initialization failed", err); }
   })();
-</script>
+  </script>
 </body>
 </html>
