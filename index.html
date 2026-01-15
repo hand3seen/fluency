@@ -883,7 +883,7 @@ Is your thing"
       // Why
       const why = document.createElement("div");
       why.className = "hint";
-      why.textContent = active.why;
+      why.textContent = active.why + "  (debug: len=" + String((active.text || "").length) + ")";
 
       // Practice text
       const practice = document.createElement("div");
@@ -895,7 +895,11 @@ Is your thing"
  sequences into real newlines, then rely on CSS pre-line.
       const normalized = String(active.text || "").replaceAll("\n", "
 ");
-      practice.textContent = normalized;
+      const finalText = (normalized && normalized.trim().length) ? normalized : "[No text loaded - check POOLS + buildSet]";
+      practice.textContent = finalText;
+      // Force visibility in case of CSS collisions
+      practice.style.color = "var(--text)";
+      practice.style.whiteSpace = "pre-line";
 
       article.appendChild(row);
       article.appendChild(why);
