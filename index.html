@@ -167,7 +167,7 @@
       border-radius: var(--radius2);
       border:1px solid var(--line);
       background: rgba(0,0,0,.16);
-      white-space: normal;
+      white-space: pre-line;
     }
 
     .practiceText.big{font-size: 28px}
@@ -789,82 +789,140 @@ Is your thing"
 
       const chunks = parseChunks(state.set.chunk);
 
+      // Build step data with plain TEXT (not HTML) to avoid rendering/escaping issues.
       const steps = [
         {
           title: "Fresh rhyme",
           icon: "M",
           why: "Find a beat (tap/clap). Read it 3 times: (1) slow, (2) on the beat, (3) same beat - smoother.",
-          textHtml: poemToHtml(state.set.rhyme || "(missing rhyme)"),
-          actionsHtml: '<button class="secondary" data-action="tip" data-tip="Beat tip" data-sub="Keep a steady 1-2-3-4. Same beat each repeat.">Tip</button>'
+          text: (state.set.rhyme == null ? "" : String(state.set.rhyme)),
+          isPoem: true,
+          actions: [{ kind:"tip", label:"Tip", tip:"Beat tip", sub:"Keep a steady 1-2-3-4. Same beat each repeat." }]
         },
         {
           title: "Tongue twister",
           icon: "T",
           why: "Whisper -> normal -> smooth. Do not race; connect the sounds.",
-          textHtml: escapeHtml(state.set.twister || ""),
-          actionsHtml: '<button class="secondary" data-action="tip" data-tip="Mouth tip" data-sub="Relax your jaw. Smooth wins.">Tip</button>'
+          text: (state.set.twister == null ? "" : String(state.set.twister)),
+          isPoem: false,
+          actions: [{ kind:"tip", label:"Tip", tip:"Mouth tip", sub:"Relax your jaw. Smooth wins." }]
         },
         {
           title: "Echo reading",
           icon: "E",
           why: "Adult reads once. Student echoes with the same rhythm and pauses.",
-          textHtml: escapeHtml(state.set.echo || ""),
-          actionsHtml: '<button class="secondary" data-action="tip" data-tip="Echo tip" data-sub="Match pauses like copying a melody.">Tip</button>'
+          text: (state.set.echo == null ? "" : String(state.set.echo)),
+          isPoem: false,
+          actions: [{ kind:"tip", label:"Tip", tip:"Echo tip", sub:"Match pauses like copying a melody." }]
         },
         {
           title: "Phrase chunking",
           icon: "C",
           why: "Read chunks first, then read the whole sentence smoothly.",
-          textHtml: escapeHtml(state.set.chunk || ""),
-          actionsHtml: '<button data-action="toggleChunks">Show chunks</button>',
-          extraHtml:
-            '<div class="chunks" id="chunks" style="display:none" aria-label="Chunked phrase tiles">'
-            + chunks.map(c => '<span class="chunk">' + escapeHtml(c) + '</span>').join("")
-            + '</div>'
+          text: (state.set.chunk == null ? "" : String(state.set.chunk)),
+          isPoem: false,
+          actions: [{ kind:"toggleChunks", label:"Show chunks" }],
+          chunks: chunks
         },
         {
           title: "Performance read",
           icon: "P",
           why: "Read it like: robot -> storyteller -> best smooth voice.",
-          textHtml: escapeHtml(state.set.perf || ""),
-          actionsHtml: '<button class="secondary" data-action="tip" data-tip="Performance" data-sub="Try: robot (flat), calm teacher, excited announcer.">Ideas</button>'
+          text: (state.set.perf == null ? "" : String(state.set.perf)),
+          isPoem: false,
+          actions: [{ kind:"tip", label:"Ideas", tip:"Performance", sub:"Try: robot (flat), calm teacher, excited announcer." }]
         }
       ];
 
       const active = steps[state.stepIndex];
 
-      const bigClass = state.bigText ? " big" : "";
-      const html =
-        '<article class="step">'
-        + '<div class="row">'
-        +   '<h2><span class="icon" aria-hidden="true">' + escapeHtml(active.icon) + '</span> ' + escapeHtml(active.title) + '</h2>'
-        +   '<div class="miniBtns">' + (active.actionsHtml || "") + '</div>'
-        + '</div>'
-        + '<div class="hint">' + escapeHtml(active.why) + '</div>'
-        + '<div class="practiceText' + bigClass + '" role="group" aria-label="Practice text">' + (active.textHtml || "") + '</div>'
-        + (active.extraHtml || "")
-        + '</article>';
+      // Clear
+      stepsEl.innerHTML = "";
 
-      stepsEl.innerHTML = html;
-      if(stepBadge) stepBadge.textContent = "Step " + String(state.stepIndex + 1) + " / 5";
+      // Article
+      const article = document.createElement("article");
+      article.className = "step";
 
-      // Bind actions
-      stepsEl.querySelectorAll("button[data-action]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const action = btn.dataset.action;
-          if(action === "toggleChunks"){
+      // Row
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const h2 = document.createElement("h2");
+      const iconSpan = document.createElement("span");
+      iconSpan.className = "icon";
+      iconSpan.setAttribute("aria-hidden","true");
+      iconSpan.textContent = active.icon;
+      h2.appendChild(iconSpan);
+      h2.appendChild(document.createTextNode(" " + active.title));
+
+      const btnWrap = document.createElement("div");
+      btnWrap.className = "miniBtns";
+
+      // Buttons
+      (active.actions || []).forEach(a => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = (a.kind === "toggleChunks") ? "" : "secondary";
+        b.textContent = a.label;
+        b.addEventListener("click", () => {
+          if(a.kind === "toggleChunks"){
             const el = $("#chunks");
             if(!el) return;
             el.style.display = (el.style.display === "none") ? "flex" : "none";
           }
-          if(action === "tip"){
-            // no-op UI tip (kept minimal)
+          if(a.kind === "tip"){
+            // Minimal: no toast dependency here; keep stable.
           }
         });
+        btnWrap.appendChild(b);
       });
+
+      row.appendChild(h2);
+      row.appendChild(btnWrap);
+
+      // Why
+      const why = document.createElement("div");
+      why.className = "hint";
+      why.textContent = active.why;
+
+      // Practice text
+      const practice = document.createElement("div");
+      practice.className = "practiceText" + (state.bigText ? " big" : "");
+      practice.setAttribute("role","group");
+      practice.setAttribute("aria-label","Practice text");
+
+      // Normalize literal 
+ sequences into real newlines, then rely on CSS pre-line.
+      const normalized = String(active.text || "").replaceAll("\n", "
+");
+      practice.textContent = normalized;
+
+      article.appendChild(row);
+      article.appendChild(why);
+      article.appendChild(practice);
+
+      // Optional chunks panel
+      if(active.chunks){
+        const chunkBox = document.createElement("div");
+        chunkBox.className = "chunks";
+        chunkBox.id = "chunks";
+        chunkBox.style.display = "none";
+        chunkBox.setAttribute("aria-label","Chunked phrase tiles");
+        active.chunks.forEach(c => {
+          const pill = document.createElement("span");
+          pill.className = "chunk";
+          pill.textContent = c;
+          chunkBox.appendChild(pill);
+        });
+        article.appendChild(chunkBox);
+      }
+
+      stepsEl.appendChild(article);
+
+      if(stepBadge) stepBadge.textContent = "Step " + String(state.stepIndex + 1) + " / 5";
     }
 
-    function newSet(){
+    function newSet(){ 
       state.set = buildSet(state.level);
       state.stepIndex = 0;
       resetTimer();
